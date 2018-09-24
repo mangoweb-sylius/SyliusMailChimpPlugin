@@ -4,6 +4,7 @@
 /vendor/
 /node_modules/
 /composer.lock
+.idea
 
 /etc/build/*
 !/etc/build/.gitkeep
