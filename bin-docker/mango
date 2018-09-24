@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -euo pipefail
+IFS=$'\n\t'
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+PROJECT_ROOT="$(dirname "$DIR")"
+
+docker run -it --rm \
+    -v "$PROJECT_ROOT":"$PROJECT_ROOT" \
+    -w "$(pwd)" \
+    mangoweb/mango-cli:v2.3.1 "$@"

@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+set -euo pipefail
+IFS=$'\n\t'
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+PROJECT_ROOT="$(dirname "$DIR")"
+
+if  [[ $@ == req* || $@ == ins* || $@ == up* || $@ == rem* ]] && [[ $@ != *ignore-platform-reqs* ]];
+then
+    echo -e "\e[33m"
+    echo "You are using composer in docker, with official composer image,"
+    echo "platform-reqs may not be fulfilled, use \`--ignore-platform-reqs\`"
+    echo "ON YOUR OWN RISK"
+    echo -e "\e[0m\n"
+fi
+
+docker run -it --rm \
+    -e "COMPOSER_CACHE_DIR=/var/cache/composer" \
+    -v composer-cache:/var/cache/composer \
+    -v "$PROJECT_ROOT":"$PROJECT_ROOT" \
+    -w "$(pwd)" \
+    composer:1 "$@"

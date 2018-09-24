@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -euo pipefail
+IFS=$'\n\t'
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+PROJECT_ROOT="$(dirname "$DIR")"
+
+docker run -i --rm \
+	--entrypoint=yarn \
+    -v "$PROJECT_ROOT":"$PROJECT_ROOT" \
+    -w "$(pwd)" \
+    mangoweb/sylius-frontend-builder:0.1 "$@"

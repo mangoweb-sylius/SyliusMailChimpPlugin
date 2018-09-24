@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -euo pipefail
+IFS=$'\n\t'
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+PROJECT_ROOT="$(dirname "$DIR")"
+
+docker-compose run --rm \
+    --entrypoint=/usr/local/bin/php \
+    --workdir=/src${PWD:${#PROJECT_ROOT}} \
+    php "$@"

@@ -1,0 +1,65 @@
+version: '3.7'
+
+x-php-service-base: &php-service-base
+    restart: on-failure
+    working_dir: /src
+    environment:
+        SYLIUS_BUILD_DIR: etc/build
+        APP_ENV: dev
+        APP_SECRET: 2a2f0c6cf200b9b9ff6f33fceabb8643
+        DATABASE_URL: pgsql://runner:runner-password@postgres:5432/test-db
+        MAILER_URL: null://localhost
+        PHP_IDE_CONFIG: "serverName=local-docker"
+        BEHAT_PARAMS: |
+            {
+                    "extensions": {
+                        "Behat\\MinkExtension": {
+                            "sessions": {
+                                "chrome": {
+                                    "selenium2": {
+                                        "wd_host": "http://selenium:4444/wd/hub"
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+            }
+    volumes:
+        - .:/src:cached
+        - ./deploy/php.ini:/usr/local/etc/php/php.ini:delegated,ro
+        - ./docker/php/session.ini:/usr/local/etc/php/conf.d/session.ini:delegated,ro
+
+services:
+    php:
+        <<: *php-service-base
+        image: 831119889470.dkr.ecr.eu-central-1.amazonaws.com/mangoweb/php:7.2
+
+    php-xdebug:
+        <<: *php-service-base
+        build: docker/php/xdebug
+
+    nginx:
+        image: 831119889470.dkr.ecr.eu-central-1.amazonaws.com/mangoweb/nginx:1.16
+        restart: on-failure
+        volumes:
+            - .:/src:cached
+
+            - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf:delegated,ro
+            - ./docker/nginx/location-php-xdebug.conf:/etc/nginx/location-php.conf:delegated,ro
+            - ./docker/nginx/fpm-upstream.conf:/etc/nginx/fpm-upstream.conf:delegated,ro
+        depends_on:
+            - php
+    postgres:
+        image: postgres:10-alpine
+        environment:
+            POSTGRES_DB: test-db
+            POSTGRES_USER: runner
+            POSTGRES_PASSWORD: runner-password
+
+   # selenium:
+   #     image: selenium/standalone-chrome:2.53.1
+
+volumes:
+    session-storage: ~
+
