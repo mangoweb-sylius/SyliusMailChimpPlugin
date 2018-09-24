@@ -4,18 +4,12 @@ includes:
     - vendor/phpstan/phpstan-webmozart-assert/extension.neon
 
 parameters:
-    reportUnmatchedIgnoredErrors: false
-
     symfony:
-        container_xml_path: tests/Application/var/cache/test/appTestDebugProjectContainer.xml
+        container_xml_path: tests/Application/var/cache/test/srcTestDebugProjectContainer.xml
 
     excludes_analyse:
-        # Makes PHPStan crash
+        # Too slow
         - 'src/DependencyInjection/Configuration.php'
 
         # Test dependencies
-        - 'tests/Application/app/**.php'
-        - 'tests/Application/src/**.php'
-
-    ignoreErrors:
-        - '/Parameter #1 $configuration of method Symfony\Component\DependencyInjection\Extension\Extension::processConfiguration() expects Symfony\Component\Config\Definition\ConfigurationInterface, Symfony\Component\Config\Definition\ConfigurationInterface|null given./'
+        - '*/tests/Application/var/*'
