@@ -18,3 +18,9 @@ knp_gaufrette:
         sylius_image:
             local:
                 directory: "%kernel.project_dir%/public/media/image"
+
+sylius_channel:
+    resources:
+        channel:
+            classes:
+                model: Tests\MangoSylius\MailChimpPlugin\Application\src\Entity\Channel

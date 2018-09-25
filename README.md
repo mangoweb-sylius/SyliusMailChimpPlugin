@@ -23,6 +23,12 @@ public function registerBundles()
 }
 ```
 
+3. Your Entity `Channel` has to implement `\MangoSylius\MailChimpPlugin\Entity\ChannelMailChimpSettingsInterface`. You can use Trait `MangoSylius\MailChimpPlugin\Entity\ChannelMailChimpSettingsTrait`. 
+
+For guide to use your own entity see [Sylius docs - Customizing Models](https://docs.sylius.com/en/1.2/customization/model.html)
+
+ 
+
 ### Development
 
 #### Usage (docker-only)
