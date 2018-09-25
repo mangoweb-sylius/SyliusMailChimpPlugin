@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Tests\MangoSylius\MailChimpPlugin\Application\src\Service;
+namespace MangoSylius\MailChimpPlugin\Service;
 
-use MangoSylius\MailChimpPlugin\Service\ChannelMailChimpSettingsProviderInterface;
+use MangoSylius\MailChimpPlugin\Entity\ChannelMailChimpSettingsInterface;
 use Psr\Log\LoggerInterface;
 use Sylius\Component\Channel\Context\ChannelContextInterface;
 use Sylius\Component\Channel\Context\ChannelNotFoundException;
-use Tests\MangoSylius\MailChimpPlugin\Application\src\Entity\Channel;
+use Sylius\Component\Core\Model\Channel;
 
 class ChannelMailChimpSettingsProvider implements ChannelMailChimpSettingsProviderInterface
 {
-	/** @var Channel */
+	/** @var ChannelMailChimpSettingsInterface */
 	private $channel;
 
 	public function __construct(
@@ -23,25 +23,25 @@ class ChannelMailChimpSettingsProvider implements ChannelMailChimpSettingsProvid
 			$channel = $channelContext->getChannel();
 		} catch (ChannelNotFoundException $e) {
 			$channel = new Channel();
-			$logger->error('ChannelMailChimpSettingsProvider did not get channel', ['exception' => $e]);
+			$logger->error('ChannelMailchimpSettingsProvider did not get channel', ['exception' => $e]);
 		}
 
-		assert($channel instanceof Channel);
+		assert($channel instanceof ChannelMailChimpSettingsInterface);
 		$this->channel = $channel;
 	}
 
 	public function getListId(): ?string
 	{
-		return $this->channel->getMailChimpListId();
+		return $this->channel->getMailchimpListId();
 	}
 
 	public function isDoubleOptInEnabled(): bool
 	{
-		return $this->channel->isMailChimpListDoubleOptInEnabled();
+		return $this->channel->isMailchimpListDoubleOptInEnabled();
 	}
 
-	public function isMailChimpEnabled(): bool
+	public function isMailchimpEnabled(): bool
 	{
-		return $this->channel->isMailChimpEnabled();
+		return $this->channel->isMailchimpEnabled();
 	}
 }

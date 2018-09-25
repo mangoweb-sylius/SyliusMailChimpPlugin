@@ -76,7 +76,7 @@ class CustomerListener implements CustomerListenerInterface
 		}
 
 		$customer = $user->getCustomer();
-		assert($customer instanceof Customer);
+		assert($customer instanceof CustomerInterface);
 		$email = $customer->getEmailCanonical();
 
 		try {

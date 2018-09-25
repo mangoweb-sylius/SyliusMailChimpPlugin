@@ -7,11 +7,19 @@ services:
     MangoSylius\MailChimpPlugin\Service\:
         resource: '../../Service/*'
 
-    #MangoSylius\MailChimpPlugin\Service\MailChimpApiClientProviderInteface: ~
-    #MangoSylius\MailChimpPlugin\Service\MailChimpManager: ~
-    #MangoSylius\MailChimpPlugin\Service\MailChimpChannelSubscriber: ~
+    mangosylius.mailchimp_plugin.service.channel_mailchimp_settings_provider:
+        class: MangoSylius\MailChimpPlugin\Service\ChannelMailChimpSettingsProvider
+        arguments:
+            $channelContext: '@sylius.context.channel.request_based'
+
+    MangoSylius\MailChimpPlugin\Service\MailChimpChannelSubscriber:
+        arguments:
+            $shopperContext: '@sylius.context.shopper'
+            $channelMailChimpSettingsProvider: '@mangosylius.mailchimp_plugin.service.channel_mailchimp_settings_provider'
 
     MangoSylius\MailChimpPlugin\Model\CustomerListener:
+        arguments:
+            $channelMailChimpSettingsProvider: '@mangosylius.mailchimp_plugin.service.channel_mailchimp_settings_provider'
         tags:
             -  { name: kernel.event_listener, event: sylius.customer.post_create, method: syncSubscriptionToMailChimp }
             -  { name: kernel.event_listener, event: sylius.customer.post_update, method: syncSubscriptionToMailChimp }

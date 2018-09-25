@@ -30,7 +30,8 @@
 		"phpunit/phpunit": "^6.5",
 		"sylius-labs/coding-standard": "^2.0",
 		"se/selenium-server-standalone": "^3.12",
-		"symfony/templating": "^4.1"
+		"symfony/templating": "^4.1",
+		"drewm/mailchimp-api": "^2.5"
 	},
 	"prefer-stable": true,
 	"autoload": {
