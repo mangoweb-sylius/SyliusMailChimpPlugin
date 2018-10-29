@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace App;
 
@@ -11,11 +9,12 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 use Symfony\Component\Routing\RouteCollectionBuilder;
 
+
 class Kernel extends BaseKernel
 {
 	use MicroKernelTrait;
 
-	const CONFIG_EXTS = '.{php,xml,yaml,yml}';
+	public const CONFIG_EXTS = '.{php,xml,yaml,yml}';
 
 	public function getCacheDir()
 	{
@@ -42,7 +41,7 @@ class Kernel extends BaseKernel
 		return \dirname(__DIR__);
 	}
 
-	protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader)
+	protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader): void
 	{
 		$container->addResource(new FileResource($this->getProjectDir() . '/config/bundles.php'));
 		// Feel free to remove the "container.autowiring.strict_mode" parameter
@@ -57,7 +56,7 @@ class Kernel extends BaseKernel
 		$loader->load($confDir . '/{services}_' . $this->environment . self::CONFIG_EXTS, 'glob');
 	}
 
-	protected function configureRoutes(RouteCollectionBuilder $routes)
+	protected function configureRoutes(RouteCollectionBuilder $routes): void
 	{
 		$confDir = $this->getProjectDir() . '/config';
 

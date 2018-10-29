@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace MangoSylius\MailChimpPlugin\Exception;
 
@@ -56,8 +54,8 @@ class MailChimpException extends \Exception
 	 * @see http://developer.mailchimp.com/documentation/mailchimp/guides/get-started-with-mailchimp-api-3/#errors
 	 */
 	public function __construct(
-		int $status, string $detail, string $type, string $title, ?array $errors = [], string $instance = null,
-		\Throwable $previous = null
+		int $status, string $detail, string $type, string $title, ?array $errors = [], ?string $instance = null,
+		?\Throwable $previous = null
 	) {
 		parent::__construct($detail, $status, $previous);
 		$this->status = $status;

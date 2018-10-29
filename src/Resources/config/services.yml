@@ -1,45 +1,45 @@
 services:
     _defaults:
-        autowire: true
-        autoconfigure: true
+        public: false
+        autowire: false
+        autoconfigure: false
 
+    MangoSylius\MailChimpPlugin\Service\MailChimpApiClientProvider: ~
 
-    MangoSylius\MailChimpPlugin\Service\:
-        resource: '../../Service/*'
+    MangoSylius\MailChimpPlugin\Service\MailChimpManager:
+        arguments:
+            $mailChimpApiClientProvider: '@MangoSylius\MailChimpPlugin\Service\MailChimpApiClientProvider'
 
-    mangosylius.mailchimp_plugin.service.channel_mailchimp_settings_provider:
-        class: MangoSylius\MailChimpPlugin\Service\ChannelMailChimpSettingsProvider
+    MangoSylius\MailChimpPlugin\Service\ChannelMailChimpSettingsProvider:
         arguments:
             $channelContext: '@sylius.context.channel.request_based'
+            $logger: '@logger'
 
     MangoSylius\MailChimpPlugin\Service\MailChimpChannelSubscriber:
         arguments:
             $shopperContext: '@sylius.context.shopper'
-            $channelMailChimpSettingsProvider: '@mangosylius.mailchimp_plugin.service.channel_mailchimp_settings_provider'
+            $channelMailChimpSettingsProvider: '@MangoSylius\MailChimpPlugin\Service\ChannelMailChimpSettingsProvider'
+            $mailChimpManager: '@MangoSylius\MailChimpPlugin\Service\MailChimpManager'
 
     MangoSylius\MailChimpPlugin\Model\CustomerListener:
         arguments:
-            $channelMailChimpSettingsProvider: '@mangosylius.mailchimp_plugin.service.channel_mailchimp_settings_provider'
+            $channelMailChimpSettingsProvider: '@MangoSylius\MailChimpPlugin\Service\ChannelMailChimpSettingsProvider'
+            $mailChimpChannelSubscriber: '@MangoSylius\MailChimpPlugin\Service\MailChimpChannelSubscriber'
+            $logger: '@logger'
         tags:
-            -  { name: kernel.event_listener, event: sylius.customer.post_create, method: syncSubscriptionToMailChimp }
-            -  { name: kernel.event_listener, event: sylius.customer.post_update, method: syncSubscriptionToMailChimp }
-            -  { name: kernel.event_listener, event: security.interactive_login, method: syncSubstriptionStateFromMailChimp }
-
-    MangoSylius\MailChimpPlugin\Repository\ChannelMailChimpSettingsRepository:
-        class: MangoSylius\MailChimpPlugin\Repository\ChannelMailChimpSettingsRepository
-        factory: ['@doctrine.orm.default_entity_manager', getRepository]
-        arguments:
-            - MangoSylius\MailChimpPlugin\Entity\ChannelMailChimpSettings
+            - name: kernel.event_listener
+              event: sylius.customer.post_create
+              method: syncSubscriptionToMailChimp
+            - name: kernel.event_listener
+              event: sylius.customer.post_update
+              method: syncSubscriptionToMailChimp
+            - name: kernel.event_listener
+              event: security.interactive_login
+              method: syncSubstriptionStateFromMailChimp
 
     MangoSylius\MailChimpPlugin\Form\Extension\MailChimpChannelTypeExtension:
-        tags:
-            - { name: form.type_extension, extended_type: Sylius\Bundle\ChannelBundle\Form\Type\ChannelType }
-
-    Sylius\Bundle\UiBundle\Block\BlockEventListener:
         arguments:
-            - '@@SyliusMailChimpPlugin\channelForm.html.twig'
+            $mailChimpManager: '@MangoSylius\MailChimpPlugin\Service\MailChimpManager'
         tags:
-            -
-                name: kernel.event_listener
-                event: sonata.block.event.sylius.admin.channel
-                method: onBlockEvent
+            - name: form.type_extension
+              extended_type: Sylius\Bundle\ChannelBundle\Form\Type\ChannelType

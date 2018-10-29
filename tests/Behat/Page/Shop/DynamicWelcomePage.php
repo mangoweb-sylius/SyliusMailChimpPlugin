@@ -1,10 +1,9 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace Tests\MangoSylius\MailChimpPlugin\Behat\Page\Shop;
 
 use Sylius\Behat\Page\SymfonyPage;
+
 
 class DynamicWelcomePage extends SymfonyPage implements WelcomePageInterface
 {
@@ -16,7 +15,7 @@ class DynamicWelcomePage extends SymfonyPage implements WelcomePageInterface
 		return $this->getSession()->getPage()->waitFor(3, function (): string {
 			$greeting = $this->getElement('greeting')->getText();
 
-			if ('Loading...' === $greeting) {
+			if ($greeting === 'Loading...') {
 				return '';
 			}
 

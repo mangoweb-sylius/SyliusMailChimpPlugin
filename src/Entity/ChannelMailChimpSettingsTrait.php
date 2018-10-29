@@ -1,23 +1,27 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace MangoSylius\MailChimpPlugin\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
 
 trait ChannelMailChimpSettingsTrait
 {
 	/**
 	 * @var string|null
+	 * @ORM\Column(type="string", nullable=true)
 	 */
 	private $mailChimpListId;
 
 	/**
 	 * @var bool
+	 * @ORM\Column(type="boolean", options={"default" : false})
 	 */
 	private $isMailChimpListDoubleOptInEnabled = false;
 
 	/**
 	 * @var bool
+	 * @ORM\Column(type="boolean", options={"default" : false})
 	 */
 	private $isMailChimpEnabled = false;
 

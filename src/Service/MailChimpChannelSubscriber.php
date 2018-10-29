@@ -1,10 +1,9 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace MangoSylius\MailChimpPlugin\Service;
 
 use Sylius\Component\Core\Context\ShopperContextInterface;
+
 
 class MailChimpChannelSubscriber
 {
@@ -42,13 +41,13 @@ class MailChimpChannelSubscriber
 		return $this->mailChimpManager->isEmailSubscribedToList($email, $this->listId);
 	}
 
-	public function subscribe(string $email)
+	public function subscribe(string $email): void
 	{
 		assert($this->isMailChimpEnabled && $this->listId !== null);
 		$this->mailChimpManager->subscribeToList($email, $this->listId, $this->shopperContext->getLocaleCode(), $this->isDoubleOptInEnabled);
 	}
 
-	public function unsubscribe(string $email)
+	public function unsubscribe(string $email): void
 	{
 		assert($this->isMailChimpEnabled && $this->listId !== null);
 		$this->mailChimpManager->unsubscribeFromList($email, $this->listId);

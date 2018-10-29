@@ -1,10 +1,9 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace MangoSylius\MailChimpPlugin\Service;
 
 use DrewM\MailChimp\MailChimp;
+
 
 class MailChimpApiClientProvider implements MailChimpApiClientProviderInterface
 {
@@ -25,7 +24,7 @@ class MailChimpApiClientProvider implements MailChimpApiClientProviderInterface
 
 	public function getClient(): ?MailChimp
 	{
-		if ($this->apiKey !== null && $this->client !== null) {
+		if ($this->apiKey !== null && $this->client === null) {
 			$this->client = new MailChimp($this->apiKey);
 
 			return $this->client;

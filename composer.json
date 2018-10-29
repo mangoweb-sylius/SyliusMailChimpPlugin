@@ -9,7 +9,8 @@
 		"ext-simplexml": "*",
 		"sylius/sylius": "^1.2.5",
 		"symfony/symfony": "^4.1",
-		"symfony/framework-bundle": "^4.1"
+		"symfony/framework-bundle": "^4.1",
+		"drewm/mailchimp-api": "^2.5"
 	},
 	"require-dev": {
 		"behat/behat": "^3.4",
@@ -30,8 +31,7 @@
 		"phpunit/phpunit": "^6.5",
 		"sylius-labs/coding-standard": "^2.0",
 		"se/selenium-server-standalone": "^3.12",
-		"symfony/templating": "^4.1",
-		"drewm/mailchimp-api": "^2.5"
+		"symfony/templating": "^4.1"
 	},
 	"prefer-stable": true,
 	"autoload": {
