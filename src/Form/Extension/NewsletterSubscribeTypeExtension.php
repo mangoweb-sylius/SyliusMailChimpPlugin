@@ -15,6 +15,7 @@ class NewsletterSubscribeTypeExtension extends AbstractTypeExtension
 		$builder->add('subscribedToNewsletter', CheckboxType::class, [
 			'label' => 'sylius.form.customer.subscribed_to_newsletter',
 			'required' => false,
+			'data' => true
 		]);
 	}
 
