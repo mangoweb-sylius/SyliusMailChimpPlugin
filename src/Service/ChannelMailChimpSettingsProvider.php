@@ -23,7 +23,7 @@ class ChannelMailChimpSettingsProvider implements ChannelMailChimpSettingsProvid
 			$this->channel = $channel;
 
 		} catch (ChannelNotFoundException $e) {
-			$logger->error('ChannelMailchimpSettingsProvider did not get channel', ['exception' => $e]);
+			$logger->warning('ChannelMailchimpSettingsProvider did not get channel', ['exception' => $e]);
 		}
 	}
 

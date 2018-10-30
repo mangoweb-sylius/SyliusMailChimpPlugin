@@ -13,21 +13,15 @@
 
 1. Run `$ composer require mangoweb-sylius/sylius-mailchimp-plugin`.
 
-2. Add plugin dependencies to your AppKernel.php
-
-```php
-public function registerBundles()
-{
-	...
-	$bundles[] = new \MangoSylius\MailChimpPlugin\MangoSyliusMailChimpPlugin();
-}
-```
+2. Register `\MangoSylius\MailChimpPlugin\MangoSyliusMailChimpPlugin` in your Kernel
 
 3. Your Entity `Channel` has to implement `\MangoSylius\MailChimpPlugin\Entity\ChannelMailChimpSettingsInterface`. You can use Trait `MangoSylius\MailChimpPlugin\Entity\ChannelMailChimpSettingsTrait`. 
 
 For guide to use your own entity see [Sylius docs - Customizing Models](https://docs.sylius.com/en/1.2/customization/model.html)
 
- 
+### Usage in checkout - optional
+
+- Include subscribe checkbox template into checkout `{{ include('@MangoSyliusMailChimpPlugin/newsletterSubscribeForm.html.twig') }}` 
 
 ### Development
 

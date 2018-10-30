@@ -39,7 +39,7 @@ class MailChimpException extends \Exception
 	/**
 	 * For field-specific details, see the 'errors' array.
 	 *
-	 * @var array
+	 * @var object[]
 	 */
 	private $errors;
 
