@@ -1,0 +1,15 @@
+/vendor/
+/node_modules/
+/composer.lock
+.idea
+
+/etc/build/*
+!/etc/build/.gitkeep
+
+docker-compose.override.yaml
+docker-compose.override.dist.yaml
+docker-compose.yaml
+/bin-docker/
+/deploy/
+/docker/
+/etc/

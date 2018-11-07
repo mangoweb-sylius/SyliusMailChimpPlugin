@@ -1,0 +1,119 @@
+stages:
+    - build:backend
+    - build:fronentd
+    - test
+
+variables:
+    SYLIUS_BUILD_DIR: etc/build
+    COMPOSER_HOME: tmp/composer
+    APP_ENV: test
+    APP_SECRET: 2a2f0c6cf200b9b9ff6f33fceabb8643
+    DATABASE_URL: pgsql://runner:runner-password@localhost:5432/test-db
+    MAILER_URL: null://localhost
+    POSTGRES_DB: test-db
+    POSTGRES_USER: runner
+    POSTGRES_PASSWORD: runner-password
+    BEHAT_PARAMS: |
+        {
+            "extensions": {
+                "Behat\\MinkExtension": {
+                    "sessions": {
+                        "chrome": {
+                            "selenium2": {
+                                "wd_host": "http://selenium:4444/wd/hub"
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+
+build:backend:
+    image: composer:1
+    stage: build:backend
+    cache:
+        key: ${CI_JOB_NAME}
+        paths:
+            - vendor
+            - ${COMPOSER_HOME}
+    script:
+        - composer require "symfony/symfony:^4.1" --no-interaction --no-update
+        - composer validate --strict
+        - composer install --no-progress --classmap-authoritative --ignore-platform-reqs --no-interaction
+        - (cd tests/Application && bin/console cache:warmup --env=test -vvv)
+        - (cd tests/Application && bin/console assets:install public --env=test -vvv)
+    artifacts:
+        paths:
+            - vendor
+            - tests/Application
+        expire_in: 1 hours
+
+build:fronentd:
+    image: mangoweb/sylius-frontend-builder:0.1
+    stage: build:fronentd
+    cache:
+        key: ${CI_JOB_NAME}
+        paths:
+            - tests/Application/node_modules
+    script:
+        - (cd tests/Application && yarn install --production=false)
+        - (cd tests/Application && yarn run gulp)
+    artifacts:
+        paths:
+            - tests/Application/node_modules
+            - tests/Application/public
+        expire_in: 1 hours
+    dependencies:
+        - build:backend
+
+test:code:
+    stage: test
+    image: php:7.2
+    script:
+        - bin/phpstan.sh
+        - bin/ecs.sh
+    dependencies:
+        - build:backend
+
+test:tests:
+    services:
+        - postgres:10-alpine
+    stage: test
+    image: 831119889470.dkr.ecr.eu-central-1.amazonaws.com/mangoweb/php:7.2 #TODO Create image for public
+    script:
+        - (cd tests/Application && bin/console doctrine:schema:create --env=test -vvv)
+        - bin/phpunit
+        - bin/behat --tags="~@javascript" --strict -vvv --no-interaction || bin/behat --tags="~@javascript" --strict -vvv --no-interaction --rerun
+    artifacts:
+        when: always
+        paths:
+            - ${SYLIUS_BUILD_DIR}
+            - tests/Application/var/log
+    dependencies:
+        - build:backend
+        - build:fronentd
+
+
+# TODO: Make work
+.test:selenium:
+    services:
+        - postgres:10-alpine
+        - selenium/standalone-chrome:2.53.1
+    stage: test
+    image: 831119889470.dkr.ecr.eu-central-1.amazonaws.com/mangoweb/php:7.2 #TODO Create image for public
+    script:
+        - (cd tests/Application && bin/console doctrine:schema:create --env=test -vvv)
+        - (cd tests/Application && bin/console server:start 127.0.0.1:8080 -d public -e test)
+        - bin/behat --tags="@javascript" --strict -vvv --no-interaction || bin/behat --tags="@javascript" --strict -vvv --no-interaction --rerun
+        - (cd tests/Application && bin/console server:stop)
+    after_script:
+        - (cd tests/Application && bin/console server:stop)
+    artifacts:
+        when: always
+        paths:
+            - ${SYLIUS_BUILD_DIR}
+            - tests/Application/var/log
+    dependencies:
+        - build:backend
+        - build:fronentd

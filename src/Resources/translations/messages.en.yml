@@ -1,0 +1,12 @@
+mango:
+    mailChimp:
+        admin:
+            form:
+                channel:
+                    enabled:
+                        label: Enabled
+                    double_optin:
+                        label: Is Double Opt-In for selected list enabled
+                    list:
+                        label: List
+                        placeholder: none
