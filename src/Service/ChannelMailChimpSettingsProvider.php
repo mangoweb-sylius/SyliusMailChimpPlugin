@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace MangoSylius\MailChimpPlugin\Service;
 
@@ -7,10 +9,9 @@ use Psr\Log\LoggerInterface;
 use Sylius\Component\Channel\Context\ChannelContextInterface;
 use Sylius\Component\Channel\Context\ChannelNotFoundException;
 
-
 class ChannelMailChimpSettingsProvider implements ChannelMailChimpSettingsProviderInterface
 {
-	/** @var ChannelMailChimpSettingsInterface */
+	/** @var ChannelMailChimpSettingsInterface|null */
 	private $channel;
 
 	public function __construct(
@@ -21,7 +22,6 @@ class ChannelMailChimpSettingsProvider implements ChannelMailChimpSettingsProvid
 			$channel = $channelContext->getChannel();
 			assert($channel instanceof ChannelMailChimpSettingsInterface);
 			$this->channel = $channel;
-
 		} catch (ChannelNotFoundException $e) {
 			$logger->warning('ChannelMailchimpSettingsProvider did not get channel', ['exception' => $e]);
 		}

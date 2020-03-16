@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace MangoSylius\MailChimpPlugin\Form\Extension;
 
@@ -7,7 +9,6 @@ use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-
 class NewsletterSubscribeTypeExtension extends AbstractTypeExtension
 {
 	public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -15,10 +16,9 @@ class NewsletterSubscribeTypeExtension extends AbstractTypeExtension
 		$builder->add('subscribedToNewsletter', CheckboxType::class, [
 			'label' => 'sylius.form.customer.subscribed_to_newsletter',
 			'required' => false,
-			'data' => true
+			'data' => true,
 		]);
 	}
-
 
 	/**
 	 * {@inheritdoc}

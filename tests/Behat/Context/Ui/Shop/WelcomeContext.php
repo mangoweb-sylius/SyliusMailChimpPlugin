@@ -1,11 +1,12 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace Tests\MangoSylius\MailChimpPlugin\Behat\Context\Ui\Shop;
 
 use Behat\Behat\Context\Context;
 use Tests\MangoSylius\MailChimpPlugin\Behat\Page\Shop\WelcomePageInterface;
 use Webmozart\Assert\Assert;
-
 
 final class WelcomeContext implements Context
 {

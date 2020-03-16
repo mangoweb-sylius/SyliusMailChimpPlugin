@@ -1,9 +1,10 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace Tests\MangoSylius\MailChimpPlugin\Behat\Page\Shop;
 
 use Sylius\Behat\Page\SymfonyPage;
-
 
 class DynamicWelcomePage extends SymfonyPage implements WelcomePageInterface
 {

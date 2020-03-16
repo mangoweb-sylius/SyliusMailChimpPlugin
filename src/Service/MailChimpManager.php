@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace MangoSylius\MailChimpPlugin\Service;
 
@@ -9,7 +11,6 @@ use MangoSylius\MailChimpPlugin\Model\MailChimpLanguageEnum;
 use MangoSylius\MailChimpPlugin\Model\MailChimpSubscriptionStatusEnum;
 use Nette\Utils\Validators;
 use Symfony\Component\HttpFoundation\Response;
-
 
 class MailChimpManager
 {

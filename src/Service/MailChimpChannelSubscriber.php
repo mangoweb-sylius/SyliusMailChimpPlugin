@@ -1,9 +1,10 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace MangoSylius\MailChimpPlugin\Service;
 
 use Sylius\Component\Core\Context\ShopperContextInterface;
-
 
 class MailChimpChannelSubscriber
 {

@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace App;
 
@@ -8,7 +10,6 @@ use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 use Symfony\Component\Routing\RouteCollectionBuilder;
-
 
 class Kernel extends BaseKernel
 {
@@ -24,6 +25,11 @@ class Kernel extends BaseKernel
 	public function getLogDir()
 	{
 		return $this->getProjectDir() . '/var/log';
+	}
+
+	protected function getContainerClass()
+	{
+		return 'testContainer';
 	}
 
 	public function registerBundles()
