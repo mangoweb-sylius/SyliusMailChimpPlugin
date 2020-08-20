@@ -31,6 +31,9 @@ services:
               event: sylius.order.post_complete
               method: syncSubscriptionToMailChimp
             - name: kernel.event_listener
+              event: sylius.customer.post_register
+              method: syncSubscriptionToMailChimp
+            - name: kernel.event_listener
               event: sylius.customer.post_create
               method: syncSubscriptionToMailChimp
             - name: kernel.event_listener
@@ -44,7 +47,7 @@ services:
     MangoSylius\MailChimpPlugin\Form\Extension\NewsletterSubscribeTypeExtension:
         tags:
             - name: form.type_extension
-              extended_type: Sylius\Bundle\CoreBundle\Form\Type\Customer\CustomerGuestType
+              extended_type: Sylius\Bundle\CoreBundle\Form\Type\Customer\CustomerCheckoutGuestType
 
     MangoSylius\MailChimpPlugin\Form\Extension\MailChimpChannelTypeExtension:
         arguments:

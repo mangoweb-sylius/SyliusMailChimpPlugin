@@ -21,6 +21,7 @@ MailChimp Plugin
 
 * Per channel configurable options
 * Subscribe user during checkout
+* Subscribe user during registration
 * Sync newsletter preferences in customer's profile
 * Select the mailing list per channel
 * Configure double opt-in per channel
@@ -35,6 +36,7 @@ MailChimp Plugin
 1. Run `$ composer require mangoweb-sylius/sylius-mailchimp-plugin`.
 2. Register `\MangoSylius\MailChimpPlugin\MangoSyliusMailChimpPlugin` in your Kernel.
 3. Your Entity `Channel` has to implement `\MangoSylius\MailChimpPlugin\Entity\ChannelMailChimpSettingsInterface`. You can use Trait `MangoSylius\MailChimpPlugin\Entity\ChannelMailChimpSettingsTrait`. 
+4. Include `{{ include('@MangoSyliusMailChimpPlugin/mailChimpChannelSettingsForm.html.twig') }}` in channel edit page.
 
 For guide to use your own entity see [Sylius docs - Customizing Models](https://docs.sylius.com/en/1.3/customization/model.html).
 

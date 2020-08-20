@@ -22,9 +22,15 @@ final class MailChimpChannelTypeExtension extends AbstractTypeExtension
 		$this->mailChimpManager = $mailChimpManager;
 	}
 
-	/**
-	 * {@inheritdoc}
-	 */
+	/** @return array<string> */
+	public static function getExtendedTypes(): array
+	{
+		return [
+			ChannelType::class,
+		];
+	}
+
+	/** @param array<mixed> $options */
 	public function buildForm(FormBuilderInterface $builder, array $options): void
 	{
 		$builder
@@ -41,13 +47,5 @@ final class MailChimpChannelTypeExtension extends AbstractTypeExtension
 					return array_flip($this->mailChimpManager->getLists());
 				}),
 			]);
-	}
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getExtendedType(): string
-	{
-		return ChannelType::class;
 	}
 }
