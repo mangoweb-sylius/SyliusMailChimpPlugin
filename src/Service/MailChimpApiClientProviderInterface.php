@@ -8,6 +8,9 @@ use DrewM\MailChimp\MailChimp;
 
 interface MailChimpApiClientProviderInterface
 {
+	/**
+	 * @param array<mixed> $config
+	 */
 	public function __construct(array $config);
 
 	public function getClient(): ?MailChimp;

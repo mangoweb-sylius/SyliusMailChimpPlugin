@@ -8,16 +8,15 @@ use DrewM\MailChimp\MailChimp;
 
 class MailChimpApiClientProvider implements MailChimpApiClientProviderInterface
 {
-	/**
-	 * @var string|null
-	 */
+	/** @var string|null */
 	private $apiKey;
 
-	/**
-	 * @var MailChimp|null
-	 */
+	/** @var MailChimp|null */
 	private $client;
 
+	/**
+	 * @param array<mixed> $config
+	 */
 	public function __construct(array $config)
 	{
 		$this->apiKey = $config['mailchimp_api_key'];

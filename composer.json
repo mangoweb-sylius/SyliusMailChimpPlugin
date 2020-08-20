@@ -6,7 +6,8 @@
 	"require": {
 		"php": "^7.3",
 		"sylius/sylius": "^1.7.0",
-		"drewm/mailchimp-api": "^2.5"
+		"drewm/mailchimp-api": "^2.5",
+		"ext-json": "*"
 	},
 	"require-dev": {
 		"behat/behat": "^3.4",

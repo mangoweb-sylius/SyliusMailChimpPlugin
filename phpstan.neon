@@ -15,3 +15,5 @@ parameters:
         - '*/tests/Application/var/*'
 
         - '*/tests/Behat/*'
+
+    checkMissingIterableValueType: false

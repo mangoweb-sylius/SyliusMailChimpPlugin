@@ -14,9 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class MailChimpManager
 {
-	/**
-	 * @var MailChimp|null
-	 */
+	/** @var MailChimp|null */
 	private $mailChimp;
 
 	public function __construct(MailChimpApiClientProvider $mailChimpApiClientProvider)
@@ -39,13 +37,15 @@ class MailChimpManager
 			$this->throwMailChimpError($this->mailChimp->getLastResponse());
 		}
 
+		assert($result !== false);
+
 		return $result['status'] === MailChimpSubscriptionStatusEnum::SUBSCRIBED;
 	}
 
 	/**
 	 * @param string $localeCode MailChimpLanguageEnum::SUPPORTED_LANGUAGES
 	 *
-	 * @return array|null
+	 * @return array<mixed>|null
 	 *
 	 * @throws MailChimpException
 	 */
@@ -75,6 +75,9 @@ class MailChimpManager
 		return is_array($result) ? $result : null;
 	}
 
+	/**
+	 * @return array<mixed>|null
+	 */
 	public function unsubscribeFromList(string $email, string $listId): ?array
 	{
 		assert($this->mailChimp instanceof MailChimp);
@@ -96,11 +99,12 @@ class MailChimpManager
 	}
 
 	/**
-	 * @return array[$listId] = $listName
+	 * @return array<mixed>
 	 */
 	public function getLists(): array
 	{
-		if ($this->mailChimp === null) {
+		$mailChimp = $this->mailChimp;
+		if ($mailChimp === null) {
 			return [];
 		}
 
@@ -109,17 +113,18 @@ class MailChimpManager
 		$page = 0;
 
 		do {
-			$result = $this->mailChimp->get('lists', [
+			$result = $mailChimp->get('lists', [
 				'offset' => $page * $count,
 				'count' => $count,
 			]);
 
-			if (!$this->mailChimp->success()) {
-				$this->throwMailChimpError($this->mailChimp->getLastResponse());
+			if (!$mailChimp->success()) {
+				$this->throwMailChimpError($mailChimp->getLastResponse());
 			}
 
 			++$page;
 
+			assert($result !== false);
 			foreach ($result['lists'] as $list) {
 				$lists[$list['id']] = $list['name'];
 			}
@@ -129,6 +134,9 @@ class MailChimpManager
 		return $lists;
 	}
 
+	/**
+	 * @param array<mixed> $errorResponse
+	 */
 	private function throwMailChimpError(array $errorResponse): void
 	{
 		if ($errorResponse['body'] === null) {
