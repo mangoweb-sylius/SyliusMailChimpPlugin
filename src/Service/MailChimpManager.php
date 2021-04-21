@@ -11,15 +11,24 @@ use MangoSylius\MailChimpPlugin\Model\MailChimpLanguageEnum;
 use MangoSylius\MailChimpPlugin\Model\MailChimpSubscriptionStatusEnum;
 use Nette\Utils\Validators;
 use Symfony\Component\HttpFoundation\Response;
+use Psr\Log\LoggerInterface;
 
 class MailChimpManager
 {
 	/** @var MailChimp|null */
 	private $mailChimp;
 
-	public function __construct(MailChimpApiClientProvider $mailChimpApiClientProvider)
-	{
+	/**
+	 * @var LoggerInterface
+	 */
+	private $logger;
+
+	public function __construct(
+		MailChimpApiClientProvider $mailChimpApiClientProvider,
+		LoggerInterface $logger
+	) {
 		$this->mailChimp = $mailChimpApiClientProvider->getClient();
+		$this->logger = $logger;
 	}
 
 	public function isEmailSubscribedToList(string $email, string $listId): bool
@@ -29,12 +38,18 @@ class MailChimpManager
 
 		$result = $this->mailChimp->get("lists/$listId/members/" . $this->mailChimp->subscriberHash($email));
 
-		if (!$this->mailChimp->success()) {
-			if (($this->mailChimp->getLastResponse()['headers']['http_code'] ?? null) === Response::HTTP_NOT_FOUND) {
-				return false;
+		try {
+			if (!$this->mailChimp->success()) {
+				if (($this->mailChimp->getLastResponse()['headers']['http_code'] ?? null) === Response::HTTP_NOT_FOUND) {
+					return false;
+				}
+				$this->throwMailChimpError($this->mailChimp->getLastResponse());
 			}
-
-			$this->throwMailChimpError($this->mailChimp->getLastResponse());
+		} catch (MailChimpInvalidErrorResponseException $e) {
+			$this->logger->error($e->getMessage() . 'Mailchimp not seccess: method MailChimpManager::isEmailSubscribedToList', [
+				'exception' => $e,
+				'customerEmail' => $email,
+			]);
 		}
 
 		assert($result !== false);
@@ -68,8 +83,15 @@ class MailChimpManager
 			]
 		);
 
-		if (!$this->mailChimp->success()) {
-			$this->throwMailChimpError($this->mailChimp->getLastResponse());
+		try {
+			if (!$this->mailChimp->success()) {
+				$this->throwMailChimpError($this->mailChimp->getLastResponse());
+			}
+		} catch (MailChimpInvalidErrorResponseException $e) {
+			$this->logger->error($e->getMessage() . 'Mailchimp not seccess: method MailChimpManager::subscribeToList', [
+				'exception' => $e,
+				'customerEmail' => $email,
+			]);
 		}
 
 		return is_array($result) ? $result : null;
@@ -91,8 +113,15 @@ class MailChimpManager
 			]
 		);
 
-		if (!$this->mailChimp->success()) {
-			$this->throwMailChimpError($this->mailChimp->getLastResponse());
+		try {
+			if (!$this->mailChimp->success()) {
+				$this->throwMailChimpError($this->mailChimp->getLastResponse());
+			}
+		} catch (MailChimpInvalidErrorResponseException $e) {
+			$this->logger->error($e->getMessage() . 'Mailchimp not seccess: method MailChimpManager::unsubscribeFromList', [
+				'exception' => $e,
+				'customerEmail' => $email,
+			]);
 		}
 
 		return is_array($result) ? $result : null;
@@ -118,8 +147,14 @@ class MailChimpManager
 				'count' => $count,
 			]);
 
-			if (!$mailChimp->success()) {
-				$this->throwMailChimpError($mailChimp->getLastResponse());
+			try {
+				if (!$this->mailChimp->success()) {
+					$this->throwMailChimpError($this->mailChimp->getLastResponse());
+				}
+			} catch (MailChimpInvalidErrorResponseException $e) {
+				$this->logger->error($e->getMessage() . 'Mailchimp not seccess: method MailChimpManager::getLists', [
+					'exception' => $e
+				]);
 			}
 
 			++$page;
