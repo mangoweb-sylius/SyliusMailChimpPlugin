@@ -46,7 +46,7 @@ class MailChimpManager
 				$this->throwMailChimpError($this->mailChimp->getLastResponse());
 			}
 		} catch (MailChimpInvalidErrorResponseException $e) {
-			$this->logger->error($e->getMessage() . 'Mailchimp not seccess: method MailChimpManager::isEmailSubscribedToList', [
+			$this->logger->error($e->getMessage() . 'Mailchimp not success: method MailChimpManager::isEmailSubscribedToList', [
 				'exception' => $e,
 				'customerEmail' => $email,
 			]);
@@ -88,7 +88,7 @@ class MailChimpManager
 				$this->throwMailChimpError($this->mailChimp->getLastResponse());
 			}
 		} catch (MailChimpInvalidErrorResponseException $e) {
-			$this->logger->error($e->getMessage() . 'Mailchimp not seccess: method MailChimpManager::subscribeToList', [
+			$this->logger->error($e->getMessage() . 'Mailchimp not success: method MailChimpManager::subscribeToList', [
 				'exception' => $e,
 				'customerEmail' => $email,
 			]);
@@ -118,7 +118,7 @@ class MailChimpManager
 				$this->throwMailChimpError($this->mailChimp->getLastResponse());
 			}
 		} catch (MailChimpInvalidErrorResponseException $e) {
-			$this->logger->error($e->getMessage() . 'Mailchimp not seccess: method MailChimpManager::unsubscribeFromList', [
+			$this->logger->error($e->getMessage() . 'Mailchimp not success: method MailChimpManager::unsubscribeFromList', [
 				'exception' => $e,
 				'customerEmail' => $email,
 			]);
@@ -152,7 +152,7 @@ class MailChimpManager
 					$this->throwMailChimpError($this->mailChimp->getLastResponse());
 				}
 			} catch (MailChimpInvalidErrorResponseException $e) {
-				$this->logger->error($e->getMessage() . 'Mailchimp not seccess: method MailChimpManager::getLists', [
+				$this->logger->error($e->getMessage() . 'Mailchimp not success: method MailChimpManager::getLists', [
 					'exception' => $e
 				]);
 			}
